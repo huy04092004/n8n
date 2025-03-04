@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Home</title>
+</head>
+<body>
+<h1>Welcome, <span th:text="${user.fullName}"></span>!</h1>
+<p>Your email: <span th:text="${user.email}"></span></p>
+
+<!-- Form đăng ký lịch khám -->
+<h2>Đăng ký lịch khám</h2>
+<form th:action="@{/appointment/book}" method="post">
+    <input type="hidden" name="userId" th:value="${user.id}" />
+    <label>Ngày khám:</label>
+    <input type="date" name="appointmentDate" required>
+    <label>Giờ khám:</label>
+    <input type="time" name="appointmentTime" required>
+    <label>Ghi chú:</label>
+    <textarea name="notes"></textarea>
+    <button type="submit">Đăng ký</button>
+</form>
+
+ Danh sách lịch khám
+<h2>Lịch khám của bạn</h2>
+ <table border="1">
+    <tr>
+        <th>Ngày</th>
+        <th>Giờ</th>
+        <th>Trạng thái</th>
+        <th>Ghi chú</th>
+    </tr>
+    <tr th:each="appointment : ${appointments}">
+        <td th:text="${appointment.appointmentDate}"></td>
+        <td th:text="${appointment.appointmentTime}"></td>
+        <td th:text="${appointment.status}"></td> <!-- Hiển thị trạng thái -->
+        <td th:text="${appointment.notes}"></td>
+    </tr>
+</table>
+
+
+<br>
+<a href="/auth/logout">Logout</a>
+</body>
+</html>
