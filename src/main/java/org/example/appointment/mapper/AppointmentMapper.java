@@ -19,4 +19,9 @@ public interface AppointmentMapper {
             @Result(property = "notes", column = "notes")
     })
     List<Appointment> getAppointmentsByUser(int userId);
+    @Select("SELECT * FROM appointments WHERE cancellation_token = #{token}")
+    Appointment getAppointmentByToken(String token);
+
+    @Update("UPDATE appointments SET status = #{status} WHERE id = #{id}")
+    void updateAppointment(Appointment appointment);
 }
