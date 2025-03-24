@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Chi tiết bác sĩ - Phòng khám</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav-menu">
+            <div>
+                <a th:href="@{/}" style="font-size: 1.5rem; font-weight: bold;">Phòng khám</a>
+            </div>
+            <div>
+                <a th:href="@{/doctors}">Bác sĩ</a>
+                <a th:href="@{/services}">Dịch vụ</a>
+                <a th:href="@{/appointments}">Đặt lịch</a>
+                <a th:href="@{/support}">Hỗ trợ</a>
+                <a th:href="@{/auth/login}">Đăng nhập</a>
+                <a th:href="@{/auth/register}">Đăng ký</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main style="margin-top: 80px;">
+        <div class="container">
+            <!-- Doctor Profile Section -->
+            <section class="doctor-profile">
+                <div class="profile-grid">
+                    <div class="profile-image">
+                        <img th:src="${doctor.image}" alt="Doctor Image">
+                    </div>
+                    <div class="profile-info">
+                        <h1 th:text="${doctor.fullName}">Bác sĩ</h1>
+                        <p class="specialty" th:text="${doctor.specialty.name}">Chuyên khoa</p>
+                        <div class="rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                            <span th:text="${doctor.rating}">4.5</span>
+                        </div>
+                        <div class="experience">
+                            <i class="fas fa-briefcase"></i>
+                            <span th:text="${doctor.experience} + năm kinh nghiệm">10+ năm kinh nghiệm</span>
+                        </div>
+                        <div class="price">
+                            <i class="fas fa-money-bill-wave"></i>
+                            <span th:text="${doctor.price} + 'đ'">500.000đ</span>
+                        </div>
+                        <div class="schedule">
+                            <h3>Lịch làm việc:</h3>
+                            <p th:text="${doctor.schedule}">Thứ 2 - Thứ 6: 8:00 - 17:00</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Doctor Details Section -->
+            <section class="doctor-details">
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="about">Giới thiệu</button>
+                    <button class="tab-btn" data-tab="education">Học vấn</button>
+                    <button class="tab-btn" data-tab="experience">Kinh nghiệm</button>
+                    <button class="tab-btn" data-tab="reviews">Đánh giá</button>
+                </div>
+
+                <div class="tab-content">
+                    <div id="about" class="tab-pane active">
+                        <h2>Giới thiệu</h2>
+                        <p th:text="${doctor.description}">Mô tả về bác sĩ...</p>
+                    </div>
+
+                    <div id="education" class="tab-pane">
+                        <h2>Học vấn</h2>
+                        <ul class="timeline">
+                            <li th:each="edu : ${doctor.education}">
+                                <div class="timeline-content">
+                                    <h3 th:text="${edu.degree}">Bằng cấp</h3>
+                                    <p th:text="${edu.school}">Trường học</p>
+                                    <p th:text="${edu.year}">Năm tốt nghiệp</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div id="experience" class="tab-pane">
+                        <h2>Kinh nghiệm</h2>
+                        <ul class="timeline">
+                            <li th:each="exp : ${doctor.experience}">
+                                <div class="timeline-content">
+                                    <h3 th:text="${exp.position}">Vị trí</h3>
+                                    <p th:text="${exp.hospital}">Bệnh viện</p>
+                                    <p th:text="${exp.period}">Thời gian</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div id="reviews" class="tab-pane">
+                        <h2>Đánh giá</h2>
+                        <div class="reviews-list">
+                            <div class="review-card" th:each="review : ${doctor.reviews}">
+                                <div class="review-header">
+                                    <img th:src="${review.patientImage}" alt="Patient Image" class="reviewer-image">
+                                    <div class="reviewer-info">
+                                        <h4 th:text="${review.patientName}">Tên bệnh nhân</h4>
+                                        <div class="rating">
+                                            <i class="fas fa-star" th:each="i : ${#numbers.sequence(0, review.rating - 1)}"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p class="review-content" th:text="${review.content}">Nội dung đánh giá...</p>
+                                <p class="review-date" th:text="${review.date}">Ngày đánh giá</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Appointment Form Section -->
+            <section class="appointment-form">
+                <h2>Đặt lịch khám</h2>
+                <form th:action="@{/appointments/book}" method="post">
+                    <input type="hidden" name="doctorId" th:value="${doctor.id}" />
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Ngày khám:</label>
+                            <input type="date" name="appointmentDate" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Giờ khám:</label>
+                            <select name="appointmentTime" required>
+                                <option value="">Chọn giờ</option>
+                                <option th:each="time : ${availableTimes}"
+                                        th:value="${time}"
+                                        th:text="${time}">
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Họ và tên:</label>
+                            <input type="text" name="fullName" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Số điện thoại:</label>
+                            <input type="tel" name="phone" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Email:</label>
+                            <input type="email" name="email" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Triệu chứng:</label>
+                            <textarea name="symptoms" rows="3"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Phương thức thanh toán:</label>
+                            <select name="paymentMethod" required>
+                                <option value="DIRECT">Thanh toán trực tiếp</option>
+                                <option value="ONLINE">Thanh toán online</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="text-align: center; margin-top: 2rem;">
+                        <button type="submit" class="btn btn-primary">Đặt lịch</button>
+                    </div>
+                </form>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h3>Về chúng tôi</h3>
+                    <p>Phòng khám với đội ngũ bác sĩ chuyên môn cao, trang thiết bị hiện đại.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Liên kết nhanh</h3>
+                    <ul>
+                        <li><a th:href="@{/doctors}">Bác sĩ</a></li>
+                        <li><a th:href="@{/services}">Dịch vụ</a></li>
+                        <li><a th:href="@{/appointments}">Đặt lịch</a></li>
+                        <li><a th:href="@{/support}">Hỗ trợ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Liên hệ</h3>
+                    <p>123 Đường ABC, Quận 1, TP.HCM</p>
+                    <p>Điện thoại: 1900 1234</p>
+                    <p>Email: info@phongkham.com</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Phòng khám. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Tab switching functionality
+        document.querySelectorAll('.tab-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons and panes
+                document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+
+                // Add active class to clicked button and corresponding pane
+                button.classList.add('active');
+                document.getElementById(button.dataset.tab).classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html> 

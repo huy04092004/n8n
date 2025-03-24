@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Tìm kiếm bác sĩ - Phòng khám</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav-menu">
+            <div>
+                <a th:href="@{/}" style="font-size: 1.5rem; font-weight: bold;">Phòng khám</a>
+            </div>
+            <div>
+                <a th:href="@{/doctors}">Bác sĩ</a>
+                <a th:href="@{/services}">Dịch vụ</a>
+                <a th:href="@{/appointments}">Đặt lịch</a>
+                <a th:href="@{/support}">Hỗ trợ</a>
+                <a th:href="@{/auth/login}">Đăng nhập</a>
+                <a th:href="@{/auth/register}">Đăng ký</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main style="margin-top: 80px;">
+        <!-- Search Section -->
+        <section class="search-section">
+            <div class="container">
+                <h1>Tìm kiếm bác sĩ</h1>
+                <form th:action="@{/doctors/search}" method="get" class="search-form">
+                    <div class="search-grid">
+                        <div class="form-group">
+                            <label>Chuyên khoa:</label>
+                            <select name="specialty">
+                                <option value="">Tất cả chuyên khoa</option>
+                                <option th:each="spec : ${specialties}"
+                                        th:value="${spec.id}"
+                                        th:text="${spec.name}"
+                                        th:selected="${selectedSpecialty == spec.id}">
+                                </option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Địa điểm:</label>
+                            <select name="location">
+                                <option value="">Tất cả địa điểm</option>
+                                <option th:each="loc : ${locations}"
+                                        th:value="${loc.id}"
+                                        th:text="${loc.name}"
+                                        th:selected="${selectedLocation == loc.id}">
+                                </option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Ngày khám:</label>
+                            <input type="date" name="date" th:value="${selectedDate}">
+                        </div>
+                        <div class="form-group">
+                            <label>Giờ khám:</label>
+                            <select name="time">
+                                <option value="">Tất cả giờ</option>
+                                <option th:each="time : ${availableTimes}"
+                                        th:value="${time}"
+                                        th:text="${time}"
+                                        th:selected="${selectedTime == time}">
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group" style="text-align: center; margin-top: 1rem;">
+                        <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Doctors List Section -->
+        <section class="doctors-list-section">
+            <div class="container">
+                <div class="doctors-grid">
+                    <div class="doctor-card" th:each="doctor : ${doctors}">
+                        <img th:src="${doctor.image}" alt="Doctor Image">
+                        <div class="doctor-info">
+                            <h3 th:text="${doctor.fullName}">Bác sĩ</h3>
+                            <p th:text="${doctor.specialty.name}">Chuyên khoa</p>
+                            <p th:text="${doctor.experience} + năm kinh nghiệm">Kinh nghiệm</p>
+                            <div class="rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                                <span th:text="${doctor.rating}">4.5</span>
+                            </div>
+                            <div class="price" th:text="${doctor.price} + 'đ'">500.000đ</div>
+                            <div class="schedule">
+                                <h4>Lịch làm việc:</h4>
+                                <p th:text="${doctor.schedule}">Thứ 2 - Thứ 6: 8:00 - 17:00</p>
+                            </div>
+                            <a th:href="@{/doctors/{id}(id=${doctor.id})}" class="btn btn-primary">Xem chi tiết</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pagination -->
+                <div class="pagination" th:if="${totalPages > 1}">
+                    <a th:if="${currentPage > 1}" 
+                       th:href="@{/doctors(page=${currentPage - 1})}"
+                       class="btn btn-primary">
+                        <i class="fas fa-chevron-left"></i>
+                    </a>
+                    <span th:each="page : ${#numbers.sequence(0, totalPages - 1)}"
+                          th:class="${page + 1 == currentPage ? 'active' : ''}"
+                          th:text="${page + 1}">
+                    </span>
+                    <a th:if="${currentPage < totalPages}"
+                       th:href="@{/doctors(page=${currentPage + 1})}"
+                       class="btn btn-primary">
+                        <i class="fas fa-chevron-right"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h3>Về chúng tôi</h3>
+                    <p>Phòng khám với đội ngũ bác sĩ chuyên môn cao, trang thiết bị hiện đại.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Liên kết nhanh</h3>
+                    <ul>
+                        <li><a th:href="@{/doctors}">Bác sĩ</a></li>
+                        <li><a th:href="@{/services}">Dịch vụ</a></li>
+                        <li><a th:href="@{/appointments}">Đặt lịch</a></li>
+                        <li><a th:href="@{/support}">Hỗ trợ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Liên hệ</h3>
+                    <p>123 Đường ABC, Quận 1, TP.HCM</p>
+                    <p>Điện thoại: 1900 1234</p>
+                    <p>Email: info@phongkham.com</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Phòng khám. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html> 

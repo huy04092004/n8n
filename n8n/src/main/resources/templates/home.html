@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Trang chủ - Phòng khám</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav-menu">
+            <div>
+                <a th:href="@{/}" style="font-size: 1.5rem; font-weight: bold;">Phòng khám</a>
+            </div>
+            <div>
+                <a th:href="@{/doctors}">Bác sĩ</a>
+                <a th:href="@{/services}">Dịch vụ</a>
+                <a th:href="@{/appointments}">Đặt lịch</a>
+                <a th:href="@{/support}">Hỗ trợ</a>
+                <a th:href="@{/auth/login}">Đăng nhập</a>
+                <a th:href="@{/auth/register}">Đăng ký</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Chăm sóc sức khỏe chất lượng cao</h1>
+            <p>Đặt lịch khám trực tuyến với đội ngũ bác sĩ chuyên môn cao</p>
+            <a th:href="@{/appointments}" class="btn btn-primary">Đặt lịch ngay</a>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services-section">
+        <div class="container">
+            <h2>Dịch vụ của chúng tôi</h2>
+            <div class="services-grid">
+                <div class="service-card">
+                    <i class="fas fa-user-md"></i>
+                    <h3>Khám tổng quát</h3>
+                    <p>Kiểm tra sức khỏe định kỳ và tư vấn chuyên môn</p>
+                </div>
+                <div class="service-card">
+                    <i class="fas fa-heartbeat"></i>
+                    <h3>Tim mạch</h3>
+                    <p>Chẩn đoán và điều trị các bệnh về tim mạch</p>
+                </div>
+                <div class="service-card">
+                    <i class="fas fa-brain"></i>
+                    <h3>Thần kinh</h3>
+                    <p>Điều trị các bệnh về thần kinh và tâm thần</p>
+                </div>
+                <div class="service-card">
+                    <i class="fas fa-baby"></i>
+                    <h3>Nhi khoa</h3>
+                    <p>Chăm sóc sức khỏe trẻ em toàn diện</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Doctors Section -->
+    <section class="doctors-section">
+        <div class="container">
+            <h2>Bác sĩ nổi bật</h2>
+            <div class="doctors-grid">
+                <div class="doctor-card" th:each="doctor : ${featuredDoctors}">
+                    <img th:src="${doctor.image}" alt="Doctor Image">
+                    <h3 th:text="${doctor.fullName}">Bác sĩ</h3>
+                    <p th:text="${doctor.specialty}">Chuyên khoa</p>
+                    <div class="rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                    <a th:href="@{/doctors/{id}(id=${doctor.id})}" class="btn btn-primary">Xem chi tiết</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Popular Packages Section -->
+    <section class="packages-section">
+        <div class="container">
+            <h2>Các gói khám phổ biến</h2>
+            <div class="packages-grid">
+                <div class="package-card">
+                    <h3>Gói cơ bản</h3>
+                    <div class="price">500.000đ</div>
+                    <ul>
+                        <li>Khám tổng quát</li>
+                        <li>Xét nghiệm cơ bản</li>
+                        <li>Tư vấn dinh dưỡng</li>
+                        <li>Bảo hiểm y tế</li>
+                    </ul>
+                    <a th:href="@{/appointments}" class="btn btn-primary">Đặt lịch</a>
+                </div>
+                <div class="package-card featured">
+                    <h3>Gói nâng cao</h3>
+                    <div class="price">1.000.000đ</div>
+                    <ul>
+                        <li>Khám tổng quát</li>
+                        <li>Xét nghiệm nâng cao</li>
+                        <li>Tư vấn dinh dưỡng</li>
+                        <li>Bảo hiểm y tế</li>
+                        <li>Chụp X-quang</li>
+                    </ul>
+                    <a th:href="@{/appointments}" class="btn btn-primary">Đặt lịch</a>
+                </div>
+                <div class="package-card">
+                    <h3>Gói gia đình</h3>
+                    <div class="price">2.000.000đ</div>
+                    <ul>
+                        <li>Khám tổng quát</li>
+                        <li>Xét nghiệm toàn diện</li>
+                        <li>Tư vấn dinh dưỡng</li>
+                        <li>Bảo hiểm y tế</li>
+                        <li>Chụp X-quang</li>
+                        <li>Siêu âm</li>
+                    </ul>
+                    <a th:href="@{/appointments}" class="btn btn-primary">Đặt lịch</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking Guide Section -->
+    <section class="guide-section">
+        <div class="container">
+            <h2>Hướng dẫn đặt lịch</h2>
+            <div class="guide-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Chọn dịch vụ</h3>
+                    <p>Chọn gói khám phù hợp với nhu cầu của bạn</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Chọn bác sĩ</h3>
+                    <p>Chọn bác sĩ và thời gian khám phù hợp</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Điền thông tin</h3>
+                    <p>Điền đầy đủ thông tin cá nhân và triệu chứng</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>Thanh toán</h3>
+                    <p>Chọn phương thức thanh toán và hoàn tất đặt lịch</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Support Section -->
+    <section class="support-section">
+        <div class="container">
+            <h2>Hỗ trợ 24/7</h2>
+            <div class="support-grid">
+                <div class="support-card">
+                    <i class="fas fa-phone"></i>
+                    <h3>Hotline</h3>
+                    <p>1900 1234</p>
+                </div>
+                <div class="support-card">
+                    <i class="fas fa-comments"></i>
+                    <h3>Chat trực tuyến</h3>
+                    <p>Hỗ trợ tức thì</p>
+                </div>
+                <div class="support-card">
+                    <i class="fas fa-envelope"></i>
+                    <h3>Email</h3>
+                    <p>support@phongkham.com</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h3>Về chúng tôi</h3>
+                    <p>Phòng khám với đội ngũ bác sĩ chuyên môn cao, trang thiết bị hiện đại.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Liên kết nhanh</h3>
+                    <ul>
+                        <li><a th:href="@{/doctors}">Bác sĩ</a></li>
+                        <li><a th:href="@{/services}">Dịch vụ</a></li>
+                        <li><a th:href="@{/appointments}">Đặt lịch</a></li>
+                        <li><a th:href="@{/support}">Hỗ trợ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Liên hệ</h3>
+                    <p>123 Đường ABC, Quận 1, TP.HCM</p>
+                    <p>Điện thoại: 1900 1234</p>
+                    <p>Email: info@phongkham.com</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Phòng khám. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
